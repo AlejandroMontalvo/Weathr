@@ -1,0 +1,125 @@
+body {
+  font-family: sans-serif;
+  background: #121212;
+}
+
+#current_weather {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#current_weather h1 {
+  margin: 0px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#current_weather h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  margin: 0rem;
+}
+
+.weather_icon {
+  width: 7rem;
+}
+
+#additional_information {
+  display: flex;
+  flex-direction: row;
+  background: #2e2e2e;
+  width: 100%;
+  text-align: left;
+  border-radius: 0.8rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.information_column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 0.5rem;
+  font-family: "Open Sans", sans-serif;
+}
+
+.information_column p {
+  margin-left: 0.2rem;
+  margin-bottom: 0.4rem;
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.information_icon {
+  width: 1rem;
+  margin-right: 0.3rem;
+}
+
+#current_information {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  width: fit-content;
+  margin-top: 25rem;
+  position: relative;
+  width: 24%;
+  text-align: center;
+  align-items: center;
+  background-color: #1d1d1d;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+}
+
+#city_input {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  bottom: 0;
+  text-align: center;
+  background-color: transparent;
+  border-style: none;
+  border-bottom: 1px solid white;
+  font-size: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-transform: capitalize;
+}
+
+#button_group {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  width: 50%;
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  font-size: 2.5rem;
+  width: 4rem;
+  background: #2e2e2e;
+  border-radius: 0.5rem;
+  border-style: none;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+#remove_api_button {
+  margin-bottom: auto;
+}
