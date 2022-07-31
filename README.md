@@ -1,4 +1,4 @@
-# weathr
+# Weathr
 
 A simple weather site that displays todays weather. Fetches data provided by the [OpenWeather Weather API](https://openweathermap.org/api). An OpenWeather API key is required for use.
 
