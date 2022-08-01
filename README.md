@@ -20,11 +20,7 @@ Below is an overview of each file within this project:
 
 `index.html` - The defualt website page. All aspects of the site are brought together within this file.
 
-## Script Directory
-
 `script.js` - Includes the main logic behind fetching and displaying the data.
-
-## Style Directory
 
 `style.css` - Styling for all the elements on the page.
 
