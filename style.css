@@ -5,12 +5,12 @@ body {
 
 #current_weather {
   height: 100%;
-  display: flex;
+  display: none;
   justify-content: center;
   flex-direction: column;
 }
 
-#current_weather h1 {
+#weather_heading {
   margin: 0px;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
@@ -20,10 +20,11 @@ body {
   justify-content: center;
 }
 
-#current_weather h2 {
+#weather_subheading {
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
   margin: 0rem;
+  text-transform: capitalize;
 }
 
 .weather_icon {
@@ -31,7 +32,7 @@ body {
 }
 
 #additional_information {
-  display: flex;
+  display: none;
   flex-direction: row;
   background: #2e2e2e;
   width: 100%;

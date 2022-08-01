@@ -1,5 +1,5 @@
 let apiKey = "";
-window.onload = function () {
+window.onload = async function () {
   // API key prompt
   if (!localStorage.getItem("apiKey")) {
     apiKey = prompt("Enter OpenWeather API Key:");
@@ -17,27 +17,46 @@ window.onload = function () {
     }
   });
 
+  let weatherHeading = document.getElementById("weather_heading");
+  let weatherSubheading = document.getElementById("weather_subheading");
+  let feelslike = document.getElementById("feels_like");
+  let humidity = document.getElementById("humidity");
+  let pressure = document.getElementById("pressure");
+  let minMaxTemp = document.getElementById("min_max_temp");
+  let windSpeed = document.getElementById("wind_speed");
+  let weatherStructureArray = [
+    weatherHeading,
+    weatherSubheading,
+    feelslike,
+    humidity,
+    pressure,
+    minMaxTemp,
+    windSpeed,
+  ];
+
   let weatherData;
   const input = document.getElementById("city_input");
   if (input.value != "") {
-    initiateSearch(input.value);
+    weatherData = await initiateSearch(input.value);
+    insertWeather(weatherData, weatherStructureArray);
   }
 
   let timer; // Timer identifier
   const waitTime = 800; // Wait time in milliseconds
-
   // Listen for `keyup` event
-  input.addEventListener("keyup", (event) => {
+  input.addEventListener("keyup", async (event) => {
     // Clear timer
     clearTimeout(timer);
 
     if (input.value) {
       if (event.key === "Enter") {
-        initiateSearch(input.value);
+        weatherData = await initiateSearch(input.value);
+        insertWeather(weatherData, weatherStructureArray);
       } else {
         // Wait for X ms and then process the request
-        timer = setTimeout(() => {
-          initiateSearch(input.value);
+        timer = setTimeout(async () => {
+          weatherData = await initiateSearch(input.value);
+          insertWeather(weatherData, weatherStructureArray);
         }, waitTime);
       }
     } else {
@@ -49,14 +68,14 @@ window.onload = function () {
 
   unitButton.addEventListener("click", async function () {
     toggleUnit(unitButton, weatherData);
-    updateTemperature();
+    updateTemperature(weatherData, weatherStructureArray);
   });
 };
 
 async function initiateSearch(input) {
   let coordinates = await getLocation(input);
   weatherData = await getWeather(coordinates.lat, coordinates.lon);
-  insertWeather(weatherData);
+  return weatherData;
 }
 
 const geocodeURL = (city) =>
@@ -81,7 +100,7 @@ function updateInputText(name) {
 
 let unitSymbol = "°C";
 let unitType = "metric";
-function toggleUnit(unitButton, weather) {
+function toggleUnit(unitButton) {
   if (unitType == "metric") {
     unitType = "imperial";
     unitSymbol = "°F";
@@ -90,7 +109,6 @@ function toggleUnit(unitButton, weather) {
     unitSymbol = "°C";
   }
   unitButton.innerText = unitSymbol;
-  if (weather != undefined) insertWeather(weather);
 }
 
 const weatherURL = (lat, lon) =>
@@ -114,38 +132,37 @@ async function getWeather(lat, lon) {
 //   console.log(responseData);
 // }
 
-function insertWeather(data) {
+var temp, minTemp, maxTemp, feelsLikeTemp;
+function insertWeather(weatherData, weatherStructureArray) {
   const currentWeather = document.getElementById("current_weather");
   const additionalInformation = document.getElementById(
     "additional_information"
   );
 
+  currentWeather.style.display = "flex";
+  additionalInformation.style.display = "flex";
+
   const currentInformation = document.getElementById("current_information");
   currentInformation.style = "margin-top: 11rem;";
 
-  let temp, minTemp, maxTemp, feelsLike;
-  temp = convertTemperature(data.main.temp);
-  minTemp = convertTemperature(data.main.temp_min);
-  maxTemp = convertTemperature(data.main.temp_max);
-  feelsLike = convertTemperature(data.main.feels_like);
+  temp = convertTemperature(weatherData.main.temp);
+  minTemp = convertTemperature(weatherData.main.temp_min);
+  maxTemp = convertTemperature(weatherData.main.temp_max);
+  feelsLikeTemp = convertTemperature(weatherData.main.feels_like);
 
-  currentWeather.innerHTML = `<h1><img class="weather_icon" src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"/>${temp}${unitSymbol}</h1><h2 style="text-transform: capitalize;">${data.weather[0].description}</h2>`;
-  additionalInformation.innerHTML = `<div class="information_column"><p>Feels Like: ${feelsLike}${unitSymbol}</p><p><img class="information_icon" src="./imgs/humidity.svg"/>Humidity: ${
-    data.main.humidity
-  }%</p>
-  <p><img class="information_icon" src="./imgs/barometer.svg"/>Pressure: ${
-    data.main.pressure
-  }hPa</p></div><div></div><div class="information_column">
-  <p><img class="information_icon" src="./imgs/thermometer.svg"/>Max Temp: ${maxTemp}${unitSymbol}<br>Min Temp: ${minTemp}${unitSymbol}</p>
-  <p><img  style="transform:rotate(${
-    data.wind.deg
-  }deg);" class="information_icon" src="./imgs/wind_degrees.svg"/>Wind Speed: ${
-    data.wind.speed
+  weatherStructureArray[0].innerHTML = `<img class="weather_icon" src="https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png"/>${temp}${unitSymbol}`;
+  weatherStructureArray[1].innerHTML = `${weatherData.weather[0].description}`;
+  weatherStructureArray[2].innerHTML = `Feels Like: ${feelsLikeTemp}${unitSymbol}`;
+  weatherStructureArray[3].innerHTML = `<img class="information_icon" src="./imgs/humidity.svg"/>Humidity: ${weatherData.main.humidity}%`;
+  weatherStructureArray[4].innerHTML = `<img class="information_icon" src="./imgs/barometer.svg"/>Pressure: ${weatherData.main.pressure}hPa</p>`;
+  weatherStructureArray[5].innerHTML = `<img class="information_icon" src="./imgs/thermometer.svg"/>Max Temp: ${maxTemp}${unitSymbol}<br>Min Temp: ${minTemp}${unitSymbol}`;
+  weatherStructureArray[6].innerHTML = `Wind Speed: ${
+    weatherData.wind.speed
   } m/s <br>Wind Direction: ${convertAngleToCardinalDirection(
-    data.wind.deg
-  )}</p></div>`;
+    weatherData.wind.deg
+  )}`;
 
-  updateTab(data, temp);
+  updateTab(weatherData, temp);
 }
 
 function convertTemperature(originalTemperature) {
@@ -157,7 +174,6 @@ function convertTemperature(originalTemperature) {
   }
 
   convertedTemperature = Math.floor(convertedTemperature);
-
   return convertedTemperature;
 }
 
@@ -179,6 +195,15 @@ function updateTab(data, temp) {
   document.title = `${data.name} ${temp}${unitSymbol} | Weathr`;
 }
 
-// function round(value, decimals) {
-//   return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
-// }
+function updateTemperature(weatherData, weatherStructureArray) {
+  temp = convertTemperature(weatherData.main.temp);
+  minTemp = convertTemperature(weatherData.main.temp_min);
+  maxTemp = convertTemperature(weatherData.main.temp_max);
+  feelsLikeTemp = convertTemperature(weatherData.main.feels_like);
+
+  weatherStructureArray[0].innerHTML = `<img class="weather_icon" src="https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png"/>${temp}${unitSymbol}`;
+  weatherStructureArray[2].innerHTML = `Feels Like: ${feelsLikeTemp}${unitSymbol}`;
+  weatherStructureArray[5].innerHTML = `<img class="information_icon" src="./imgs/thermometer.svg"/>Max Temp: ${maxTemp}${unitSymbol}<br>Min Temp: ${minTemp}${unitSymbol}`;
+
+  updateTab(weatherData, temp);
+}

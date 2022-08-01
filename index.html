@@ -20,8 +20,21 @@
 
 <body>
     <div id="current_information">
-        <div id="current_weather"></div>
-        <div id="additional_information"></div>
+        <div id="current_weather">
+            <h1 id="weather_heading"></h1>
+            <h2 id="weather_subheading"></h2>
+        </div>
+        <div id="additional_information">
+            <div class="information_column">
+                <p id="feels_like"></p>
+                <p id="humidity"></p>
+                <p id="pressure"></p>
+            </div>
+            <div class="information_column">
+                <p id="min_max_temp"></p>
+                <p id="wind_speed"></p>
+            </div>
+        </div>
         <input type="text" id="city_input" name="fname" placeholder="Search by city"><br><br>
         <div id="button_group">
             <button id="unit_button" title="Toggle Unit Type">°C</button>

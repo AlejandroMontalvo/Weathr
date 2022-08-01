@@ -1,6 +1,8 @@
-# Weathr
+# ![Alt Text](./imgs/Weathr.png)
 
 A simple weather site that displays todays weather. Fetches data provided by the [OpenWeather Weather API](https://openweathermap.org/api). An OpenWeather API key is required for use.
+
+![Alt Text](./imgs/weathr_preview.png)
 
 # Getting Started
 
