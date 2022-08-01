@@ -26,4 +26,10 @@ Below is an overview of each file within this project:
 
 ## Style Directory
 
-`style.css` - A simple stylesheet that makes everything look pretty.
+`style.css` - Styling for all the elements on the page.
+
+All images are stored within the `img` file directory.
+
+# License
+
+This project is licensed under [MIT](https://github.com/AlejandroMontalvo/Weathr/blob/main/License).
